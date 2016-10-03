@@ -822,7 +822,7 @@
 			node.state.disabled = true;
 
 			// Disable all other states
-			if (!options.keepState) {
+			if (options && !options.keepState) {
 				this._setSelected(node, false, options);
 				this._setChecked(node, false, options);
 				this._setExpanded(node, false, options);
