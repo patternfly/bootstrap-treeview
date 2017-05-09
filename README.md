@@ -239,9 +239,9 @@ Whether or not a node is selected.
 Used in conjunction with global showTags option to add additional information to the right of each node; using [Bootstrap Badges](http://getbootstrap.com/components/#badges)
 
 #### tagsClass
-`Array of Strings`  `Optional`
+`String, class name(s)`  `Optional`
 
-Used in conjunction with tags option to set class of node tags. The class are defined in the same order of tags. You can set null to use the default value. If class array is smaller than tags array the default value is used.
+Used in conjunction with global showTags to specify classes other than the global setting.
 
 #### dataAttr
 `Array of Objects`  `Optional`

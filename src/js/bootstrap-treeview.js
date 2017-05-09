@@ -971,11 +971,7 @@
 			$.each(node.tags, $.proxy(function addTag(id, tag) {
 				node.$el
 					.append(this._template.badge.clone()
-						.addClass(
-							typeof node.tagsClass[id] === 'string' ?
-								node.tagsClass[id] :
-								this._options.tagsClass
-						)
+						.addClass(typeof node.tagsClass === 'string' ? node.tagsClass : this._options.tagsClass)
 						.append(tag)
 					);
 			}, this));
