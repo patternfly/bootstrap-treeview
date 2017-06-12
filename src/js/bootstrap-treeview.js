@@ -972,11 +972,14 @@
 				node.$el
 					.append(this._template.badge.clone()
 						.addClass(
-							typeof node.tagsClass[id] === 'string' ?
-								node.tagsClass[id] :
-								this._options.tagsClass
+							(typeof tag === 'object' ? tag.class : undefined)
+							|| node.tagsClass
+							|| this._options.tagsClass
 						)
-						.append(tag)
+						.append(
+							(typeof tag === 'object' ? tag.text : undefined)
+							|| tag
+						)
 					);
 			}, this));
 		}
