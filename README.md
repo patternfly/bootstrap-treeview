@@ -137,7 +137,7 @@ If you want to do more, here's the full node specification
     expanded: true,
     selected: true
   },
-  tags: ['available'],
+  tags: ['available', {text:'not available', class:'disabled'}],
   dataAttr: {
     target: '#tree'
   }
@@ -238,10 +238,14 @@ Whether or not a node is selected.
 
 Used in conjunction with global showTags option to add additional information to the right of each node; using [Bootstrap Badges](http://getbootstrap.com/components/#badges)
 
-#### tagsClass
-`Array of Strings`  `Optional`
+A tag can be an object with properties 'text' for tag value and 'class' for class names(s) of this tag.
 
-Used in conjunction with tags option to set class of node tags. The class are defined in the same order of tags. You can set null to use the default value. If class array is smaller than tags array the default value is used.
+#### tagsClass
+`Strings`  `Optional`
+
+String, class names(s).  Default: "badge"
+
+Sets the class of node tags.
 
 #### dataAttr
 `Array of Objects`  `Optional`
