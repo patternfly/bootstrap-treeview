@@ -84,6 +84,8 @@
 		onNodeEnabled: undefined,
 		onNodeExpanded: undefined,
 		onNodeSelected: undefined,
+		onNodeEnter: undefined,
+		onNodeLeave: undefined,
 		onNodeUnchecked: undefined,
 		onNodeUnselected: undefined,
 
@@ -264,12 +266,16 @@
 		this.$element.off('rendered');
 		this.$element.off('destroyed');
 		this.$element.off('click');
+		this.$element.off('mouseenter');
+		this.$element.off('mouseleave');
 		this.$element.off('nodeChecked');
 		this.$element.off('nodeCollapsed');
 		this.$element.off('nodeDisabled');
 		this.$element.off('nodeEnabled');
 		this.$element.off('nodeExpanded');
 		this.$element.off('nodeSelected');
+		this.$element.off('nodeEnter');
+		this.$element.off('nodeLeave');
 		this.$element.off('nodeUnchecked');
 		this.$element.off('nodeUnselected');
 		this.$element.off('searchComplete');
@@ -305,6 +311,10 @@
 
 		this.$element.on('click', $.proxy(this._clickHandler, this));
 
+		this.$element.on('mouseenter', $.proxy(this._mouseenterHandler, this));
+
+		this.$element.on('mouseleave', $.proxy(this._mouseleaveHandler, this));
+
 		if (typeof (this._options.onNodeChecked) === 'function') {
 			this.$element.on('nodeChecked', this._options.onNodeChecked);
 		}
@@ -327,6 +337,14 @@
 
 		if (typeof (this._options.onNodeSelected) === 'function') {
 			this.$element.on('nodeSelected', this._options.onNodeSelected);
+		}
+
+		if (typeof (this._options.onNodeEnter) === 'function') {
+			this.$element.on('nodeEnter', this._options.onNodeEnter);
+		}
+
+		if (typeof (this._options.onNodeLeave) === 'function') {
+			this.$element.on('nodeLeave', this._options.onNodeLeave);
 		}
 
 		if (typeof (this._options.onNodeUnchecked) === 'function') {
@@ -508,6 +526,14 @@
 				this._toggleExpanded(node, $.extend({}, _default.options));
 			}
 		}
+	};
+
+	Tree.prototype._mouseenterHandler = function (event) {
+		console.log('ENTERENTERENTERENTERENTERENTERENTERENTERENTER ');
+	};
+
+	Tree.prototype._mouseleaveHandler = function (event) {
+		console.log('EXIT EXIT EXIT EXIT EXIT EXIT EXIT EXIT EXIT EXIT  ');
 	};
 
 	// Looks up the DOM for the closest parent list item to retrieve the
