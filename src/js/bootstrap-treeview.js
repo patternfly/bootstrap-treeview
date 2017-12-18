@@ -266,7 +266,7 @@
 		this.$element.off('rendered');
 		this.$element.off('destroyed');
 		this.$element.off('click');
-		this.$element.off('mouseenter');
+		this.$element.off('mouseover');
 		this.$element.off('mouseleave');
 		this.$element.off('nodeChecked');
 		this.$element.off('nodeCollapsed');
