@@ -311,7 +311,7 @@
 
 		this.$element.on('click', $.proxy(this._clickHandler, this));
 
-		this.$element.on('mouseenter', $.proxy(this._mouseenterHandler, this));
+		this.$element.on('mouseover', $.proxy(this._mouseoverHandler, this));
 
 		this.$element.on('mouseleave', $.proxy(this._mouseleaveHandler, this));
 
@@ -505,7 +505,6 @@
 	};
 
 	Tree.prototype._clickHandler = function (event) {
-
 		var target = $(event.target);
 		var node = this.targetNode(target);
 		if (!node || node.state.disabled) return;
@@ -528,12 +527,15 @@
 		}
 	};
 
-	Tree.prototype._mouseenterHandler = function (event) {
-		console.log('ENTERENTERENTERENTERENTERENTERENTERENTERENTER ');
+	Tree.prototype._mouseoverHandler = function (event) {
+		var target = $(event.target);
+		var node = this.targetNode(target);
+		this._triggerEvent('nodeEnter', node, _default.options);
+
 	};
 
 	Tree.prototype._mouseleaveHandler = function (event) {
-		console.log('EXIT EXIT EXIT EXIT EXIT EXIT EXIT EXIT EXIT EXIT  ');
+		this._triggerEvent('nodeLeave', null, _default.options);
 	};
 
 	// Looks up the DOM for the closest parent list item to retrieve the
