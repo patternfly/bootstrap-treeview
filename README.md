@@ -34,7 +34,7 @@ or using npm:
 $ npm install patternfly-bootstrap-treeview
 ```
 
-or [download](https://github.com/jonmiles/patternfly-bootstrap-treeview/releases) manually.
+or [download](https://github.com/patternfly/patternfly-bootstrap-treeview/releases) manually.
 
 
 
