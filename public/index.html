@@ -448,7 +448,9 @@
 
 
         $('#treeview1').treeview({
-          data: defaultData
+          data: defaultData,
+          onNodeSelected: function (event, node) { console.log("SELECT");},
+          onNodeContextMenu: function (event, node) { alert('CONTEXT');}
         });
 
         $('#treeview2').treeview({

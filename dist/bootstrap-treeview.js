@@ -86,6 +86,7 @@
 		onNodeSelected: undefined,
 		onNodeEnter: undefined,
 		onNodeLeave: undefined,
+		onNodeContextMenu: undefined,
 		onNodeUnchecked: undefined,
 		onNodeUnselected: undefined,
 
@@ -276,6 +277,7 @@
 		this.$element.off('nodeSelected');
 		this.$element.off('nodeEnter');
 		this.$element.off('nodeLeave');
+		this.$element.off('nodeContextmenu');
 		this.$element.off('nodeUnchecked');
 		this.$element.off('nodeUnselected');
 		this.$element.off('searchComplete');
@@ -315,6 +317,8 @@
 
 		this.$element.on('mouseleave', $.proxy(this._mouseleaveHandler, this));
 
+		this.$element.on('contextmenu', $.proxy(this._contextmenuHandler, this));
+
 		if (typeof (this._options.onNodeChecked) === 'function') {
 			this.$element.on('nodeChecked', this._options.onNodeChecked);
 		}
@@ -345,6 +349,10 @@
 
 		if (typeof (this._options.onNodeLeave) === 'function') {
 			this.$element.on('nodeLeave', this._options.onNodeLeave);
+		}
+
+		if (typeof (this._options.onNodeContextMenu) === 'function') {
+			this.$element.on('nodeContextmenu', this._options.onNodeContextMenu);
 		}
 
 		if (typeof (this._options.onNodeUnchecked) === 'function') {
@@ -509,6 +517,8 @@
 		var node = this.targetNode(target);
 		if (!node || node.state.disabled) return;
 
+
+
 		var classList = target.attr('class') ? target.attr('class').split(' ') : [];
 		if ((classList.indexOf('expand-icon') !== -1)) {
 			this._toggleExpanded(node, $.extend({}, _default.options));
@@ -536,6 +546,13 @@
 
 	Tree.prototype._mouseleaveHandler = function (event) {
 		this._triggerEvent('nodeLeave', null, _default.options);
+	};
+
+	Tree.prototype._contextmenuHandler = function (event) {
+		var target = $(event.target);
+		var node = this.targetNode(target);
+		this._triggerEvent('nodeContextmenu', node, _default.options);
+
 	};
 
 	// Looks up the DOM for the closest parent list item to retrieve the
