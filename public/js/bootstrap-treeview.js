@@ -267,7 +267,7 @@
 		this.$element.off('rendered');
 		this.$element.off('destroyed');
 		this.$element.off('click');
-		this.$element.off('mouseenter');
+		this.$element.off('mouseover');
 		this.$element.off('mouseleave');
 		this.$element.off('nodeChecked');
 		this.$element.off('nodeCollapsed');
@@ -549,6 +549,8 @@
 		event.preventDefault();
 		var target = $(event.target);
 		var node = this.targetNode(target);
+		node.clientX = event.pageX;
+		node.clientY = event.pageY;
 		this._triggerEvent('nodeContextMenu', node, _default.options);
 	};
 

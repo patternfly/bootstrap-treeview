@@ -549,6 +549,8 @@
 		event.preventDefault();
 		var target = $(event.target);
 		var node = this.targetNode(target);
+		node.clientX = event.pageX;
+		node.clientY = event.pageY;
 		this._triggerEvent('nodeContextMenu', node, _default.options);
 	};
 

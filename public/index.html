@@ -450,7 +450,7 @@
         $('#treeview1').treeview({
           data: defaultData,
           onNodeSelected: function (event, node) { console.log("SELECT");},
-          onNodeContextMenu: function (event, node) { alert('CONTEXT');}
+          onNodeContextMenu: function (event, node) { alert('CONTEXT X:' + node.clientX + " Y:" + node.clientY);}
         });
 
         $('#treeview2').treeview({

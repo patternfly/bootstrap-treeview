@@ -267,7 +267,7 @@
 		this.$element.off('rendered');
 		this.$element.off('destroyed');
 		this.$element.off('click');
-		this.$element.off('mouseenter');
+		this.$element.off('mouseover');
 		this.$element.off('mouseleave');
 		this.$element.off('nodeChecked');
 		this.$element.off('nodeCollapsed');
@@ -277,7 +277,7 @@
 		this.$element.off('nodeSelected');
 		this.$element.off('nodeEnter');
 		this.$element.off('nodeLeave');
-		this.$element.off('nodeContextmenu');
+		this.$element.off('nodeContextMenu');
 		this.$element.off('nodeUnchecked');
 		this.$element.off('nodeUnselected');
 		this.$element.off('searchComplete');
@@ -352,7 +352,7 @@
 		}
 
 		if (typeof (this._options.onNodeContextMenu) === 'function') {
-			this.$element.on('nodeContextmenu', this._options.onNodeContextMenu);
+			this.$element.on('nodeContextMenu', this._options.onNodeContextMenu);
 		}
 
 		if (typeof (this._options.onNodeUnchecked) === 'function') {
@@ -517,8 +517,6 @@
 		var node = this.targetNode(target);
 		if (!node || node.state.disabled) return;
 
-
-
 		var classList = target.attr('class') ? target.attr('class').split(' ') : [];
 		if ((classList.indexOf('expand-icon') !== -1)) {
 			this._toggleExpanded(node, $.extend({}, _default.options));
@@ -541,7 +539,6 @@
 		var target = $(event.target);
 		var node = this.targetNode(target);
 		this._triggerEvent('nodeEnter', node, _default.options);
-
 	};
 
 	Tree.prototype._mouseleaveHandler = function (event) {
@@ -549,10 +546,12 @@
 	};
 
 	Tree.prototype._contextmenuHandler = function (event) {
+		event.preventDefault();
 		var target = $(event.target);
 		var node = this.targetNode(target);
-		this._triggerEvent('nodeContextmenu', node, _default.options);
-
+		node.clientX = event.pageX;
+		node.clientY = event.pageY;
+		this._triggerEvent('nodeContextMenu', node, _default.options);
 	};
 
 	// Looks up the DOM for the closest parent list item to retrieve the
