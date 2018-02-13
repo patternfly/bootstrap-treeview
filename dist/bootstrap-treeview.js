@@ -549,9 +549,11 @@
 		event.preventDefault();
 		var target = $(event.target);
 		var node = this.targetNode(target);
-		node.clientX = event.pageX;
-		node.clientY = event.pageY;
-		this._triggerEvent('nodeContextMenu', node, _default.options);
+		if (node) {
+			node.clientX = event.pageX;
+			node.clientY = event.pageY;
+			this._triggerEvent('nodeContextMenu', node, _default.options);
+		}
 	};
 
 	// Looks up the DOM for the closest parent list item to retrieve the
