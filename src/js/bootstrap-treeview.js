@@ -1291,8 +1291,8 @@
 
 	Tree.prototype.getRootNodes = function () {
 		var siblingNodes = [];
+		var nodes = this._tree;
 		$.each(nodes, $.proxy(function (index, node) {
-			var nodes = this._tree;
 			siblingNodes = nodes.filter(function (obj) {
 				return obj.nodeId !== node.nodeId;
 			});
