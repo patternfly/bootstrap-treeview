@@ -129,6 +129,7 @@
 
 			// Query methods
 			findNodes: $.proxy(this.findNodes, this),
+			getTree: $.proxy(this.getTree, this), // todo document + test
 			getNodes: $.proxy(this.getNodes, this), // todo document + test
 			getParents: $.proxy(this.getParents, this),
 			getSiblings: $.proxy(this.getSiblings, this),
@@ -1229,6 +1230,10 @@
 		return this._findNodes(pattern, field, modifier);
 	};
 
+
+	Tree.prototype.getTree = function () {
+		return this._tree;
+	};
 
 	/**
 		Returns an ordered aarray of node objects.
