@@ -84,6 +84,9 @@
 		onNodeEnabled: undefined,
 		onNodeExpanded: undefined,
 		onNodeSelected: undefined,
+		onNodeEnter: undefined,
+		onNodeLeave: undefined,
+		onNodeContextMenu: undefined,
 		onNodeUnchecked: undefined,
 		onNodeUnselected: undefined,
 
@@ -126,9 +129,11 @@
 
 			// Query methods
 			findNodes: $.proxy(this.findNodes, this),
+			getTree: $.proxy(this.getTree, this), // todo document + test
 			getNodes: $.proxy(this.getNodes, this), // todo document + test
 			getParents: $.proxy(this.getParents, this),
 			getSiblings: $.proxy(this.getSiblings, this),
+			getRootNodes: $.proxy(this.getRootNodes, this),
 			getSelected: $.proxy(this.getSelected, this),
 			getUnselected: $.proxy(this.getUnselected, this),
 			getExpanded: $.proxy(this.getExpanded, this),
@@ -264,12 +269,17 @@
 		this.$element.off('rendered');
 		this.$element.off('destroyed');
 		this.$element.off('click');
+		this.$element.off('mouseover');
+		this.$element.off('mouseleave');
 		this.$element.off('nodeChecked');
 		this.$element.off('nodeCollapsed');
 		this.$element.off('nodeDisabled');
 		this.$element.off('nodeEnabled');
 		this.$element.off('nodeExpanded');
 		this.$element.off('nodeSelected');
+		this.$element.off('nodeEnter');
+		this.$element.off('nodeLeave');
+		this.$element.off('nodeContextMenu');
 		this.$element.off('nodeUnchecked');
 		this.$element.off('nodeUnselected');
 		this.$element.off('searchComplete');
@@ -305,6 +315,12 @@
 
 		this.$element.on('click', $.proxy(this._clickHandler, this));
 
+		this.$element.on('mouseover', $.proxy(this._mouseoverHandler, this));
+
+		this.$element.on('mouseleave', $.proxy(this._mouseleaveHandler, this));
+
+		this.$element.on('contextmenu', $.proxy(this._contextmenuHandler, this));
+
 		if (typeof (this._options.onNodeChecked) === 'function') {
 			this.$element.on('nodeChecked', this._options.onNodeChecked);
 		}
@@ -327,6 +343,18 @@
 
 		if (typeof (this._options.onNodeSelected) === 'function') {
 			this.$element.on('nodeSelected', this._options.onNodeSelected);
+		}
+
+		if (typeof (this._options.onNodeEnter) === 'function') {
+			this.$element.on('nodeEnter', this._options.onNodeEnter);
+		}
+
+		if (typeof (this._options.onNodeLeave) === 'function') {
+			this.$element.on('nodeLeave', this._options.onNodeLeave);
+		}
+
+		if (typeof (this._options.onNodeContextMenu) === 'function') {
+			this.$element.on('nodeContextMenu', this._options.onNodeContextMenu);
 		}
 
 		if (typeof (this._options.onNodeUnchecked) === 'function') {
@@ -487,7 +515,6 @@
 	};
 
 	Tree.prototype._clickHandler = function (event) {
-
 		var target = $(event.target);
 		var node = this.targetNode(target);
 		if (!node || node.state.disabled) return;
@@ -507,6 +534,27 @@
 			} else {
 				this._toggleExpanded(node, $.extend({}, _default.options));
 			}
+		}
+	};
+
+	Tree.prototype._mouseoverHandler = function (event) {
+		var target = $(event.target);
+		var node = this.targetNode(target);
+		this._triggerEvent('nodeEnter', node, _default.options);
+	};
+
+	Tree.prototype._mouseleaveHandler = function (event) {
+		this._triggerEvent('nodeLeave', null, _default.options);
+	};
+
+	Tree.prototype._contextmenuHandler = function (event) {
+		event.preventDefault();
+		var target = $(event.target);
+		var node = this.targetNode(target);
+		if (node) {
+			node.clientX = event.pageX;
+			node.clientY = event.pageY;
+			this._triggerEvent('nodeContextMenu', node, _default.options);
 		}
 	};
 
@@ -1179,10 +1227,14 @@
 		@param {String} pattern - A pattern to match against a given field
 		@return {String} field - Field to query pattern against
 	*/
-	Tree.prototype.findNodes = function (pattern, field) {
-		return this._findNodes(pattern, field);
+	Tree.prototype.findNodes = function (pattern, field, modifier) {
+		return this._findNodes(pattern, field, modifier);
 	};
 
+
+	Tree.prototype.getTree = function () {
+		return this._tree;
+	};
 
 	/**
 		Returns an ordered aarray of node objects.
@@ -1236,6 +1288,22 @@
 			return obj;
 		});
 	};
+
+	Tree.prototype.getRootNodes = function () {
+		var siblingNodes = [];
+		var nodes = this._tree;
+		$.each(nodes, $.proxy(function (index, node) {
+			siblingNodes = nodes.filter(function (obj) {
+				return obj.nodeId !== node.nodeId;
+			});
+		}, this));
+
+		// flatten possible nested array before returning
+		return $.map(siblingNodes, function (obj) {
+			return obj;
+		});
+	};
+
 
 	/**
 		Returns an array of selected nodes.
