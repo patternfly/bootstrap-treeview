@@ -133,6 +133,7 @@
 			getNodes: $.proxy(this.getNodes, this), // todo document + test
 			getParents: $.proxy(this.getParents, this),
 			getSiblings: $.proxy(this.getSiblings, this),
+			getRootNodes: $.proxy(this.getRootNodes, this),
 			getSelected: $.proxy(this.getSelected, this),
 			getUnselected: $.proxy(this.getUnselected, this),
 			getExpanded: $.proxy(this.getExpanded, this),
@@ -1287,6 +1288,22 @@
 			return obj;
 		});
 	};
+
+	Tree.prototype.getRootNodes = function () {
+		var siblingNodes = [];
+		$.each(nodes, $.proxy(function (index, node) {
+			var nodes = this._tree;
+			siblingNodes = nodes.filter(function (obj) {
+				return obj.nodeId !== node.nodeId;
+			});
+		}, this));
+
+		// flatten possible nested array before returning
+		return $.map(siblingNodes, function (obj) {
+			return obj;
+		});
+	};
+
 
 	/**
 		Returns an array of selected nodes.
