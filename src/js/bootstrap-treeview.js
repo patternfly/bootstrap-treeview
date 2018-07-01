@@ -926,11 +926,16 @@
 		// Append .classes to the node
 		node.$el.addClass(node.class);
 
+		// Set Node Color
+		if (node.color) {
+			node.$el.css('color', node.color);
+		}
+
 		// Set the #id of the node if specified
 		if (node.id) {
 			node.$el.attr('id', node.id);
 		}
-
+		
 		// Append custom data- attributes to the node
 		if (node.dataAttr) {
 			$.each(node.dataAttr, function (key, value) {
