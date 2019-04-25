@@ -71,7 +71,7 @@ $('#tree').treeview({data: getTree()});
 
 ## Data Structure
 
-In order to define the hierarchical structure needed for the tree it's necessary to provide a nested array of JavaScript objects.
+In order to define the hierarchical structure needed for the tree it's necessary to provide a nested array of JavaScript objects. You can use lazyLoad keyword to achieve dynamic data load.
 
 Example
 
@@ -79,6 +79,7 @@ Example
 var tree = [
   {
     text: "Parent 1",
+    lazyLoad: true,
     nodes: [
       {
         text: "Child 1",
@@ -97,16 +98,20 @@ var tree = [
     ]
   },
   {
-    text: "Parent 2"
+    text: "Parent 2",
+    lazyLoad: true
   },
   {
-    text: "Parent 3"
+    text: "Parent 3",
+    lazyLoad: true
   },
   {
-    text: "Parent 4"
+    text: "Parent 4",
+    lazyLoad: true
   },
   {
-    text: "Parent 5"
+    text: "Parent 5",
+    lazyLoad: true
   }
 ];
 ```
@@ -149,6 +154,7 @@ If you want to do more, here's the full node specification
   id: 'something',
   class: 'special extraordinary',
   hideCheckbox: true,
+  lazyLoad: false,
   nodes: [
     {},
     ...
@@ -299,8 +305,21 @@ Options allow you to customise the treeview's default appearance and behaviour. 
 $('#tree').treeview({
   data: data,
   levels: 5,
+  lazyLoad: load_branch, // If data set lazyLoad true, this define a function to load data when click a node expand tag
   backColor: 'green'
 });
+// The load_branch funtion may be like this:
+load_branch = function(node, func) {
+            $.ajax({
+                url: xxx,
+                dataType: 'json', 
+                async: async,
+                success: function (res, status) {
+                    func(res); // the same as $("#tree").treeview("addNode", [res, node]);
+                }
+
+            });
+        };
 ```
 You can pass a new options object to the treeview at any time but this will have the effect of re-initializing the treeview.
 
@@ -955,7 +974,11 @@ $('#tree').treeview({
   // e.g. nodeSelected -> onNodeSelected
   onNodeSelected: function(event, data) {
     // Your logic goes here
-  });
+  },
+  onRightClick: function(event, data) {
+    // Your logic goes here as right mouse button 
+  }
+  );
 ```
 
 and using jQuery .on method
