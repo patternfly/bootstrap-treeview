@@ -305,7 +305,7 @@ Options allow you to customise the treeview's default appearance and behaviour. 
 $('#tree').treeview({
   data: data,
   levels: 5,
-  lazyLoad: load_branch, // If data set lazyLoad true, this define a function to load data when click a node expand tag
+  lazyLoad: load_branch, // If data set lazyLoad true, define this to load data when node expand icon clicked
   backColor: 'green'
 });
 // The load_branch funtion may be like this:
