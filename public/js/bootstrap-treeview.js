@@ -1379,28 +1379,24 @@
 		// initialize new state and render changes
 		this._setInitialStates({nodes: this._tree}, 0)
 			.done($.proxy(function () {
-				if (parentNode && !parentNode.state.expanded) {
-					this._setExpanded(parentNode, true, options);
-				}
-				if (parentNode && parentNode.nodes) {
-					var render = [], flag = false;
-					$.each(this._orderedNodes, function (i, v) {
-						if (v.level === parentNode.level && v.recid === parentNode.recid) {
-							flag = true;
-							render.push(v);
-							return true;
+				if (parentNode && parentNode.nodes && parentNode.lazyLoad !== true) {
+					// if node's parents hasn't expanded, do it
+					var parent = [], needExpand = [parentNode];
+					while (1) {
+						parent = this.getParents(parentNode);
+						if (parent == false || parent[0].state.expanded === true) {
+							break;
+						} else {
+							needExpand.push(parent[0]);
+							parentNode = parent;
 						}
-						if (flag) {
-							if (v.level <= parentNode.level) {
-								return false;
-							}
-							render.push(v);
-						}
-					});
-					this._render(render);//only render new nodes
-				} else {
-					this._render();//render all nodes
+					}
+					$.each(needExpand.reverse(), $.proxy(function (i, v) {
+						this.expandNode(v);
+					}, this));
 				}
+				this._render();
+
 			}, this));
 	}
 
@@ -1491,34 +1487,37 @@
 		options = $.extend({}, _default.options, options);
 
 		// insert new node
-		var targetNodes, updateNode;
+		var targetNodes;
 		var parentNode = this._nodes[node.parentId];
 		if (parentNode) {
 			targetNodes = parentNode.nodes;
-			updateNode = parentNode;
 		} else {
 			targetNodes = this._tree;
-			updateNode = node;
 		}
 		targetNodes.splice(node.index, 1, newNode);
-
-		// remove old node from DOM
-		//this._removeNodeEl(node);
 
 		// initialize new state and render changes
 		this._setInitialStates({nodes: this._tree}, 0)
 			.done($.proxy(function () {
-				if (updateNode && !updateNode.state.expanded) {
-					this._setExpanded(updateNode, true, options);
+				if (parentNode && parentNode.nodes) {
+					// if node's parents hasn't expanded, do it
+					var parent = [], needExpand = [parentNode];
+					while (1) {
+						parent = this.getParents(parentNode);
+						if (parent == false || parent[0].state.expanded === true) {
+							break;
+						} else {
+							needExpand.push(parent[0]);
+							parentNode = parent;
+						}
+					}
+					$.each(needExpand.reverse(), $.proxy(function (i, v) {
+						this.expandNode(v);
+					}, this));
 				}
-				if (updateNode && updateNode.nodes) {
-					this._render([updateNode].concat(updateNode.nodes));//only render new nodes
-				} else {
-					this._render();//render all nodes
-				}
+				this._render();//render nodes
 			}, this));//this._render.bind(this)
 	};
-
 
 	/**
 	 Selects given tree nodes
