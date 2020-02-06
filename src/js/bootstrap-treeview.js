@@ -926,6 +926,11 @@
 		// Append .classes to the node
 		node.$el.addClass(node.class);
 
+		// Set Node's Color
+		if (node.color) {
+			node.$el.css('color', node.color);
+		}                
+
 		// Set the #id of the node if specified
 		if (node.id) {
 			node.$el.attr('id', node.id);
