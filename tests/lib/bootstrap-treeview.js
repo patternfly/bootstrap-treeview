@@ -445,8 +445,10 @@
 			}
 
 			// set visible state; based parent state plus levels
-			if ((parent && parent.state && parent.state.expanded) ||
-					(level <= this._options.levels)) {
+			var isParentExpanded = (parent && parent.state && parent.state.expanded);
+			var isParentStateExpandedUndefined = (!parent || !parent.state || !parent.state.hasOwnProperty("expanded") );
+			if ((isParentExpanded) ||
+					(level <= this._options.levels && isParentStateExpandedUndefined) ) {
 				node.state.visible = true;
 			}
 			else {

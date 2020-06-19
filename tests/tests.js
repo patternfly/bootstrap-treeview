@@ -1194,4 +1194,32 @@
 		.treeview(true);
 	});
 
+	test('Correct initial levels shown with state', function () {
+		var dataWithStates = [
+			{
+				text: 'Parent 1',
+				nodes: [
+					{
+						text: 'Child 1',
+						state:{expanded:false},
+						nodes: [
+							{
+								text: 'Grandchild 1'
+							},
+							{
+								text: 'Grandchild 2'
+							}
+						]
+					}
+				]
+			}
+		];
+
+		var $tree = init({
+			data: dataWithStates,
+			levels:5	
+		});
+		
+		equal($($tree.selector + ' ul li:not(.node-hidden)').length, 2, 'Correctly display 1 root and 1 child node when levels set to 5 and child is collapsed.');
+	});
 }());
